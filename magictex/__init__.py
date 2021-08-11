@@ -2,7 +2,7 @@
 
 https://github.com/cheind/magic-texture
 """
-from typing import Tuple
+from typing import Tuple, Optional
 import numpy as np
 
 
@@ -15,37 +15,38 @@ def coordinate_grid(shape: Tuple[int, int], dtype=np.float32):
     return XYZ
 
 
+def random_transform(coords: np.ndarray, rng: np.random.Generator = None):
+    """Returns randomly transformed coordinates"""
+    H, W = coords.shape[:2]
+    rng = rng or np.random.default_rng()
+    m = rng.uniform(-1.0, 1.0, size=(3, 3)).astype(coords.dtype)
+    return (coords.reshape(-1, 3) @ m.T).reshape(H, W, 3)
+
+
 def magic(
     coords: np.ndarray,
-    scale: float = 1.0,
-    offset: float = 0.0,
-    depth: int = 2,
-    distortion: float = 5.0,
+    depth: Optional[int] = None,
+    distortion: Optional[int] = None,
     rng: np.random.Generator = None,
 ):
     """Returns color magic color texture.
 
     The implementation is based on Blender's (https://www.blender.org/) magic
-    texture shader. The following adaptions are made: we exchange the nested
-    if-cascade by a probabilistic iterative approach, the geometric coordinates
-    are not fixed but an argument to this method.
+    texture shader. The following adaptions have been made:
+     - we exchange the nested if-cascade by a probabilistic iterative approach
 
     Kwargs
     ------
     coords: HxWx3 array
         Coordinates transformed into colors by this method. See
         `magictex.coordinate_grid` to generate the default.
-    scale: float
-        Scale of the pattern. Scales < 1. lead to enlargement of structures,
-        scales > 1 to smaller patterns.
-    offset: float
-        Translational offset applied to generated pattern.
-    depth: int
+    depth: int (optional)
         Number of transformations applied. Higher numbers lead to more
-        nested patterns.
-    distortion: float
+        nested patterns. If not specified, randomly sampled.
+    distortion: float (optional)
         Distortion of patterns. Larger values indicate more distortion,
-        lower values tend to generate smoother patterns.
+        lower values tend to generate smoother patterns. If not specified,
+        randomly sampled.
     rng: np.random.Generator
         Optional random generator to draw samples from.
 
@@ -55,8 +56,13 @@ def magic(
         Three channel color image in range [0,1]
     """
     rng = rng or np.random.default_rng()
+    if distortion is None:
+        distortion = rng.uniform(1, 4)
+    if depth is None:
+        depth = rng.integers(1, 5)
+
     H, W = coords.shape[:2]
-    XYZ = coords * scale + np.array([offset / W, offset / H, 1.0])
+    XYZ = coords
     x = np.sin((XYZ[..., 0] + XYZ[..., 1] + XYZ[..., 2]) * distortion)
     y = np.cos((-XYZ[..., 0] + XYZ[..., 1] - XYZ[..., 2]) * distortion)
     z = -np.cos((-XYZ[..., 0] - XYZ[..., 1] + XYZ[..., 2]) * distortion)

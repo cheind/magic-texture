@@ -1,16 +1,29 @@
+import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import ImageGrid
 
 import magictex as mtex
 
 
 def main():
-    coords = mtex.coordinate_grid((1024, 1024))
-    tex1 = mtex.magic(coords, scale=2.5, depth=3, distortion=3.0)
-    tex2 = mtex.magic(coords, scale=0.8, depth=5, distortion=2.0)
+    rng = np.random.default_rng(seed=1234)
+    fig = plt.figure(figsize=(12, 9))
+    grid = ImageGrid(fig, 111, nrows_ncols=(3, 4), axes_pad=0.1)
 
-    fig, axs = plt.subplots(1, 2, sharex=True, sharey=True)
-    axs[0].imshow(tex1)
-    axs[1].imshow(tex2)
+    # Create canonical coordinates for 1024x1024 image
+    coords = mtex.coordinate_grid((1024, 1024))
+    for ax in grid:
+        # Transform coordinates, distort and generate texture
+        tex = mtex.magic(
+            mtex.random_transform(coords, rng),
+            depth=rng.integers(1, 5),
+            distortion=rng.uniform(2, 3),
+            rng=rng,
+        )
+        # Plot
+        ax.get_yaxis().set_ticks([])
+        ax.get_xaxis().set_ticks([])
+        ax.imshow(tex)
     plt.show()
 
 
