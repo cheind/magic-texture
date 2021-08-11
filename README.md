@@ -37,6 +37,9 @@ def main():
         ax.get_xaxis().set_ticks([])
         ax.imshow(tex)
     plt.show()
+
+if __name__ == "__main__":
+    main()
 ```
 
 **Tip** for best performance generate coordinates once and reuse them for multiple textures.
