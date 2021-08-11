@@ -36,6 +36,17 @@ pip install git+https://github.com/cheind/magic-texture
 ## Why?
 In domain randomization, many aspects controlling the visual scene appearance are massively randomized to synthesize training data for deep learning models. In this respect, magic textures have served us quite well in the recent past (blendtorch2020).
 
+## Benchmark
+For different image sizes with `depth=3`
+```
+(256, 256): coords 0.001 sec/image, magic 0.011 sec/image
+(512, 512): coords 0.002 sec/image, magic 0.047 sec/image
+(1024, 1024): coords 0.008 sec/image, magic 0.181 sec/image
+(2048, 2048): coords 0.029 sec/image, magic 0.716 sec/image
+```
+
+See `benchmark.py` for details.
+
 ## References
 ```
 @inproceedings{blendtorch2020,
