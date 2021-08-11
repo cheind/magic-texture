@@ -23,7 +23,7 @@ def main():
     plt.show()
 ```
 
-**Note** the above is not a deterministic result. See `rng` argument to `magictex.magic` to adjust the behaviour.
+**Note** the above is not a deterministic result. See `rng` argument to `magictex.magic` to adjust the behavior.
 
 **Tip** for best performance generate coordinates once and reuse them for multiple textures.
 
