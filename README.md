@@ -20,7 +20,7 @@ import magictex as mtex
 def main():
     rng = np.random.default_rng(seed=123)
     fig = plt.figure(figsize=(12, 9))
-    grid = ImageGrid(fig, 111, nrows_ncols=(4, 3), axes_pad=0.1)
+    grid = ImageGrid(fig, 111, nrows_ncols=(3, 4), axes_pad=0.1)
 
     # Create canonical coordinates for 1024x1024 image
     coords = mtex.coordinate_grid((1024, 1024))
@@ -53,10 +53,10 @@ In domain randomization, many aspects controlling the visual scene appearance ar
 ## Benchmark
 For different image sizes with `depth=3`
 ```
-(256, 256): coords 0.001 sec/image, magic 0.011 sec/image
-(512, 512): coords 0.002 sec/image, magic 0.047 sec/image
-(1024, 1024): coords 0.008 sec/image, magic 0.181 sec/image
-(2048, 2048): coords 0.029 sec/image, magic 0.716 sec/image
+(256, 256): coords 0.001 sec/image, magic 0.006 sec/image
+(512, 512): coords 0.002 sec/image, magic 0.028 sec/image
+(1024, 1024): coords 0.007 sec/image, magic 0.112 sec/image
+(2048, 2048): coords 0.029 sec/image, magic 0.450 sec/image
 ```
 
 See `benchmark.py` for details.
