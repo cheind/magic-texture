@@ -2,7 +2,7 @@
 Generates psychedelic color textures in the spirit of Blender's magic texture shader using Python/Numpy.
 
 <div align='center'>
-    <img src='etc/magic.svg' width="80%"/>
+    <img src='etc/magic.svg' width="60%"/>
 </div>
 
 ## Usage
